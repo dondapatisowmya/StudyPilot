@@ -25,7 +25,7 @@ const Resources: React.FC<ResourcesProps> = ({ theme, userSubjects = [] }) => {
     setResources([]);
     setSummary('');
 
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
     try {
       const response = await ai.models.generateContent({
@@ -92,7 +92,7 @@ const Resources: React.FC<ResourcesProps> = ({ theme, userSubjects = [] }) => {
               onClick={() => findResources()}
               disabled={loading || !query.trim()}
               className={`px-8 py-4 rounded-2xl font-black text-white shadow-lg transition-all transform active:scale-95 ${
-                loading || !query.trim() ? 'bg-gray-300 dark:bg-slate-700' : 'bg-emerald-600 hover:bg-emerald-700'
+                loading || !query.trim() ? 'bg-gray-300 dark:bg-slate-800' : 'bg-emerald-600 hover:bg-emerald-700'
               }`}
             >
               {loading ? 'SEARCHING...' : 'FIND RESOURCES'}

@@ -1,9 +1,9 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { StudyPlanParams, StudyPlanResponse } from "../types";
+import { StudyPlanParams, StudyPlanResponse } from "../types.ts";
 
 export const generateStudyPlan = async (params: StudyPlanParams): Promise<StudyPlanResponse> => {
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY|| '' });
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const dateInfo = params.examDate 
     ? `- Exam Date: ${params.examDate}` 

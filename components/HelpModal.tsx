@@ -29,7 +29,7 @@ const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose, theme, onNavigat
     setLoading(true);
     setAnswer('');
     
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     try {
       const response = await ai.models.generateContent({
         model: "gemini-3-flash-preview",

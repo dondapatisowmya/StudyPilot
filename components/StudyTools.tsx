@@ -41,7 +41,7 @@ const StudyTools: React.FC<StudyToolsProps> = ({ theme, userSubjects = [] }) => 
     setLoading(true);
     setResult(null);
 
-    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     try {
       let prompt = '';
