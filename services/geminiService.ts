@@ -3,7 +3,7 @@ import { StudyPlanParams, StudyPlanResponse } from "../types";
 
 export const generateStudyPlan = async (params: StudyPlanParams): Promise<StudyPlanResponse> => {
   // Use gemini-3-pro-preview for advanced reasoning tasks like study planning.
-  // The API key must be obtained exclusively from process.env.API_KEY.
+  // The API key is obtained from process.env.API_KEY (defined in vite.config.ts).
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const dateInfo = params.examDate 

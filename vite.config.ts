@@ -8,10 +8,9 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      // Required to use process.env.API_KEY in the client side as per instructions.
-      // We look for API_KEY (standard) or VITE_GEMINI_API_KEY (common pattern).
-      'process.env.API_KEY': JSON.stringify(env.API_KEY || env.VITE_GEMINI_API_KEY),
-      'process.env': env
+      // Safely inject the API key for browser consumption.
+      // Netlify or local .env provides either API_KEY or VITE_API_KEY.
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || env.VITE_API_KEY || '')
     },
     build: {
       outDir: 'dist',
