@@ -1,14 +1,13 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
-import Header from './components/Header.tsx';
-import PlanForm from './components/PlanForm.tsx';
-import PlanResults from './components/PlanResults.tsx';
-import LoadingState from './components/LoadingState.tsx';
-import StudyTools from './components/StudyTools.tsx';
-import Resources from './components/Resources.tsx';
-import HelpModal from './components/HelpModal.tsx';
-import { StudyPlanParams, StudyPlanResponse } from './types.ts';
-import { generateStudyPlan } from './services/geminiService.ts';
+import Header from './components/Header';
+import PlanForm from './components/PlanForm';
+import PlanResults from './components/PlanResults';
+import LoadingState from './components/LoadingState';
+import StudyTools from './components/StudyTools';
+import Resources from './components/Resources';
+import HelpModal from './components/HelpModal';
+import { StudyPlanParams, StudyPlanResponse } from './types';
+import { generateStudyPlan } from './services/geminiService';
 
 type View = 'planner' | 'tools' | 'resources';
 type Theme = 'light' | 'dark';

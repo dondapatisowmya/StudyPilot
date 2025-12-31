@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
-
-// Removed prohibited process.env shim as the environment variable is handled externally.
+import App from './App';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {

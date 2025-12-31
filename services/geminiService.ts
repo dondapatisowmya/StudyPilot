@@ -1,11 +1,10 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { StudyPlanParams, StudyPlanResponse } from "../types.ts";
+import { StudyPlanParams, StudyPlanResponse } from "../types";
 
 export const generateStudyPlan = async (params: StudyPlanParams): Promise<StudyPlanResponse> => {
   // Use gemini-3-pro-preview for advanced reasoning tasks like study planning.
-  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEYPI_KEY, });
-  
-
+  // The API key must be obtained exclusively from process.env.API_KEY.
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const dateInfo = params.examDate 
     ? `- Exam Date: ${params.examDate}` 
@@ -98,11 +97,9 @@ export const generateStudyPlan = async (params: StudyPlanParams): Promise<StudyP
       }
     });
 
-    // Directly access the text property as per the response guidelines
     const text = response.text;
     if (!text) throw new Error("The AI didn't return any text.");
     
-    // The response is requested as application/json, so we can parse it directly after trimming
     return JSON.parse(text.trim());
   } catch (error) {
     console.error("Gemini API Error:", error);

@@ -1,13 +1,21 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  // Removed explicit process.env definitions and env loading to comply with 
-  // guidelines and fix the process.cwd() reference error.
-  build: {
-    outDir: 'dist',
-    sourcemap: false
-  }
+export default defineConfig(({ mode }) => {
+  // Load environment variables from the project root.
+  const env = loadEnv(mode, process.cwd(), '');
+
+  return {
+    plugins: [react()],
+    define: {
+      // Required to use process.env.API_KEY in the client side as per instructions.
+      // We look for API_KEY (standard) or VITE_GEMINI_API_KEY (common pattern).
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || env.VITE_GEMINI_API_KEY),
+      'process.env': env
+    },
+    build: {
+      outDir: 'dist',
+      sourcemap: false
+    }
+  };
 });
