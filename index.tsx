@@ -1,19 +1,17 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 
-// Shim process for browser environments to prevent ReferenceErrors
-if (typeof (window as any).process === 'undefined') {
-  (window as any).process = { env: { API_KEY: '' } };
-}
+// Removed prohibited process.env shim as the environment variable is handled externally.
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
+  const div = document.createElement('div');
+  div.id = 'root';
+  document.body.appendChild(div);
 }
 
-const root = ReactDOM.createRoot(rootElement);
+const root = ReactDOM.createRoot(document.getElementById('root')!);
 root.render(
   <React.StrictMode>
     <App />
