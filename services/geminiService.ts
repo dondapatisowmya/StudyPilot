@@ -2,8 +2,8 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { StudyPlanParams, StudyPlanResponse } from "../types";
 
 export const generateStudyPlan = async (params: StudyPlanParams): Promise<StudyPlanResponse> => {
-  // Use gemini-3-pro-preview for advanced reasoning tasks like study planning.
-  // The API key is obtained from process.env.API_KEY (defined in vite.config.ts).
+  // Use gemini-3-flash-preview for standard text reasoning tasks like study planning.
+  // It is fast and reliable for complex JSON outputs.
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
   const dateInfo = params.examDate 
@@ -11,26 +11,23 @@ export const generateStudyPlan = async (params: StudyPlanParams): Promise<StudyP
     : "- Exam Date: Not set yet (Please provide a general preparation plan for the next 6-8 weeks).";
 
   const textPrompt = `
-    You are a friendly and helpful study coach for students. 
+    You are a friendly and professional academic mentor. 
     
-    TASK: Create a simple, clear study plan.
-    LANGUAGE LEVEL: Use simple English.
+    TASK: Create a personalized, actionable study plan.
     
-    Student Information:
+    Student Details:
     - Exam: ${params.examType}
     ${dateInfo}
-    - Daily Study Time: ${params.dailyHours} hours
-    - All Subjects: ${params.subjects.join(', ')}
-    - Subjects they find hard: ${params.weakSubjects.join(', ')}
-    ${params.extraNotes ? `- Extra Notes from Student: "${params.extraNotes}"` : ''}
+    - Availability: ${params.dailyHours} hours per day
+    - Subjects to cover: ${params.subjects.join(', ')}
+    - Areas needing extra focus: ${params.weakSubjects.join(', ')}
+    ${params.extraNotes ? `- Specific Constraints/Goals: "${params.extraNotes}"` : ''}
 
-    ATTACHMENTS: The student has provided photos/PDFs of their syllabus or notes. 
-    Use the information in these files to make the study plan very specific to their actual school work.
+    ${params.attachments && params.attachments.length > 0 ? "I have attached specific syllabus or notes. Use the content of these files to ensure the topics mentioned in the plan are accurate to my specific curriculum." : ""}
     
-    The plan must focus on the subjects they find hard. Include small breaks. 
-    ${params.examDate ? `Suggest clear dates for practice tests (mock tests) before ${params.examDate}.` : "Since no exam date is set, suggest mock tests at regular intervals like every 2 weeks."}
+    The plan must prioritize the weak subjects. Include structured breaks and active recall sessions.
     
-    Return ONLY a valid JSON object.
+    Return ONLY a valid JSON object matching the requested schema.
   `;
 
   const parts: any[] = [{ text: textPrompt }];
@@ -48,7 +45,7 @@ export const generateStudyPlan = async (params: StudyPlanParams): Promise<StudyP
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-pro-preview",
+      model: "gemini-3-flash-preview",
       contents: { parts },
       config: {
         responseMimeType: "application/json",
@@ -98,11 +95,14 @@ export const generateStudyPlan = async (params: StudyPlanParams): Promise<StudyP
     });
 
     const text = response.text;
-    if (!text) throw new Error("The AI didn't return any text.");
+    if (!text) throw new Error("No response text from AI.");
     
     return JSON.parse(text.trim());
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    throw new Error("I had trouble talking to the AI. Please check your connection.");
+  } catch (error: any) {
+    console.error("Gemini API Error Detail:", error);
+    if (error.message?.includes('403') || error.message?.includes('401')) {
+      throw new Error("Invalid API Key. Please check your deployment environment variables.");
+    }
+    throw new Error("Our study engine encountered an issue. Please try again in a few moments.");
   }
 };

@@ -40,7 +40,7 @@ const App: React.FC = () => {
       setPlan(result);
     } catch (err: any) {
       console.error(err);
-      setError('I had trouble making your plan. Please check your internet and try again.');
+      setError(err.message || 'I had trouble making your plan. Please check your internet and try again.');
     } finally {
       setLoading(false);
     }
@@ -104,15 +104,28 @@ const App: React.FC = () => {
             {loading && <LoadingState theme={theme} />}
 
             {error && (
-              <div className={`max-w-2xl mx-auto mt-10 p-6 border rounded-2xl ${theme === 'dark' ? 'bg-red-900/20 border-red-800 text-red-200' : 'bg-red-50 border-red-200 text-red-700'}`}>
-                <h3 className="text-xl font-bold mb-2">Oops! Something went wrong</h3>
-                <p className="mb-4">{error}</p>
-                <button 
-                  onClick={() => setLoading(false)} 
-                  className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors"
-                >
-                  Try Again
-                </button>
+              <div className={`max-w-2xl mx-auto mt-10 p-8 border rounded-3xl ${theme === 'dark' ? 'bg-red-900/20 border-red-800 text-red-100 shadow-2xl' : 'bg-red-50 border-red-200 text-red-800 shadow-lg'}`}>
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="bg-red-500 text-white p-2 rounded-xl">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                  </div>
+                  <h3 className="text-2xl font-black uppercase tracking-tight">System Message</h3>
+                </div>
+                <p className="mb-6 font-medium leading-relaxed">{error}</p>
+                <div className="flex space-x-4">
+                  <button 
+                    onClick={() => setLoading(false)} 
+                    className="bg-emerald-600 text-white px-8 py-3 rounded-2xl font-black hover:bg-emerald-700 transition-all shadow-lg active:scale-95"
+                  >
+                    Try Again
+                  </button>
+                  <button 
+                    onClick={resetPlan} 
+                    className={`px-8 py-3 rounded-2xl font-black border transition-all ${theme === 'dark' ? 'border-slate-700 hover:bg-slate-800' : 'border-red-200 hover:bg-red-100'}`}
+                  >
+                    Start Over
+                  </button>
+                </div>
               </div>
             )}
 

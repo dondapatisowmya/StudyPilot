@@ -8,9 +8,9 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      // Safely inject the API key for browser consumption.
-      // Netlify or local .env provides either API_KEY or VITE_API_KEY.
-      'process.env.API_KEY': JSON.stringify(env.API_KEY || env.VITE_API_KEY || '')
+      // Robust mapping for the API_KEY used by the Gemini SDK.
+      // This checks common variable names used in Netlify/Local environments.
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || env.VITE_API_KEY || env.VITE_GEMINI_API_KEY || '')
     },
     build: {
       outDir: 'dist',
